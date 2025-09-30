@@ -97,7 +97,8 @@ WITH race_players AS (
     FROM fantasy.users
     JOIN fantasy.race USING (race_id)
     GROUP BY race),
--- 2. Количество игроков, совершивших покупку, и долю платящих игроков среди них
+
+       -- 2. Количество игроков, совершивших покупку, и долю платящих игроков среди них
 purchase AS (
     SELECT r.race AS race_name,
            COUNT(DISTINCT e.id) AS purchasing_players, -- Количество игроков, совершивших хотя бы одну покупку
@@ -107,7 +108,8 @@ purchase AS (
     JOIN fantasy.race AS r ON u.race_id = r.race_id
     WHERE e.amount > 0
     GROUP BY r.race),
--- 3. Считаем информацию об активности игроков (покупки и выручка)
+
+       -- 3. Считаем информацию об активности игроков (покупки и выручка)
 stats_active AS (
     SELECT r.race AS race_name,
            COUNT(e.transaction_id) AS total_purchases, -- Общее количество покупок
@@ -117,7 +119,8 @@ stats_active AS (
     JOIN fantasy.race AS r ON u.race_id = r.race_id
     WHERE e.amount > 0
     GROUP BY r.race)
--- Итоговый запрос
+
+       -- Итоговый запрос
 SELECT 
     tp.race_name,
     tp.total_players, -- Общее количество зарегистрированных игроков
@@ -132,8 +135,4 @@ FROM race_players AS tp
 LEFT JOIN purchase AS pp ON tp.race_name = pp.race_name
 LEFT JOIN stats_active AS act ON tp.race_name = act.race_name
 ORDER BY tp.race_name
-
-
--- Задача 2: Частота покупок
--- Напишите ваш запрос здесь
 
